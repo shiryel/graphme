@@ -24,3 +24,5 @@ graphmex-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+graph.*

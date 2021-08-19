@@ -28,6 +28,8 @@ defmodule Mix.Tasks.Graphme do
 
   alias Mix.Tasks.Xref
 
+  @requirements ["app.start"]
+
   @joiner "\n"
 
   @impl true
@@ -35,7 +37,13 @@ defmodule Mix.Tasks.Graphme do
     # OPTIONS
     {options, _, _} =
       OptionParser.parse(params,
-        aliases: [f: :filter, F: :filter_at, S: :subgraph_at, o: :output, O: :output_format],
+        aliases: [
+          f: :filter,
+          F: :filter_at,
+          S: :subgraph_at,
+          o: :output,
+          O: :output_format
+        ],
         strict: [
           filter: :string,
           filter_at: :integer,
@@ -52,7 +60,8 @@ defmodule Mix.Tasks.Graphme do
     format = Keyword.get(options, :output_format, "png")
 
     # MODULES
-    {:ok, mods} = :application.get_key(:izacore, :modules)
+    config = Mix.Project.config()
+    {:ok, mods} = :application.get_key(config[:app], :modules)
     mods = (not is_nil(filter) && filter_mods(mods, filter, filter_at)) || mods
     # relations, we get those outside because its very slow
     calls = Xref.calls()
